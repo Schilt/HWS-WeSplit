@@ -11,20 +11,20 @@ struct ContentView: View {
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
-    @State private var currencyFormat: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currencyCode ?? "USD")
+    let currencyFormat: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currencyCode ?? "USD")
     @FocusState private var amountIsFocused: Bool
+    
+    var totalAmount: Double {
+        let tipSelection = Double(tipPercentage)
+        let tipValue = checkAmount / 100 * tipSelection
+        return checkAmount + tipValue
+    }
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
-        let amountPerPerson = totalAmountOfCheck / peopleCount
-        
+        let amountPerPerson = totalAmount / peopleCount
         return amountPerPerson
     }
-    
-    var totalAmountOfCheck: Double {
-        let tipSelection = Double(tipPercentage)
-        let tipValue = checkAmount / 100 * tipSelection
-        return checkAmount + tipValue    }
     
     var body: some View {
         NavigationView {
@@ -52,9 +52,9 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    Text(totalAmountOfCheck, format: currencyFormat)
+                    Text(totalAmount, format: currencyFormat)
                 } header: {
-                    Text("Total amount for check")
+                    Text("Total amount")
                 }
                 
                 Section {
